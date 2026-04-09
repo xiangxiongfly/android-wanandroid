@@ -12,22 +12,22 @@ import java.util.concurrent.TimeUnit
 
 object NetworkManager {
 
-    val okHttpClient: OkHttpClient by lazy {
+    val defaultOkHttpClient: OkHttpClient by lazy {
         OkHttpClient.Builder()
-            .addInterceptor(HttpLogInterceptor())
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .addInterceptor(HttpLogInterceptor())
             .build()
     }
 
-    val retrofit: Retrofit by lazy {
+    val defaultRetrofit: Retrofit by lazy {
         Retrofit.Builder()
             .baseUrl(NetworkConfig.BASE_URL)
             .addConverterFactory(GsonConverterFactory.create(GsonFactory.getSingletonGson()))
-            .client(okHttpClient)
+            .client(defaultOkHttpClient)
             .build()
     }
 
-    fun <T> create(retrofit: Retrofit, serviceClass: Class<T>): T = retrofit.create(serviceClass)
+    fun <T> create(serviceClass: Class<T>, retrofit: Retrofit = defaultRetrofit): T = retrofit.create(serviceClass)
 }

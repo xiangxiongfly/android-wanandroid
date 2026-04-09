@@ -1,7 +1,6 @@
 package com.example.mywanandroid.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.mywanandroid.R
@@ -14,17 +13,10 @@ import com.example.mywanandroid.ui.project.ProjectFragment
 import com.example.mywanandroid.ui.tree.TreeFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
-    private val fragments = listOf(
-        HomeFragment.newInstance(),
-        ProjectFragment.newInstance(),
-        TreeFragment.newInstance(),
-        NavFragment.newInstance(),
-        ChapterFragment.newInstance(),
-    )
 
     override fun initViews() {
         binding.viewPager.isUserInputEnabled = false
-        val pageAdapter = PageAdapter(this, fragments)
+        val pageAdapter = PageAdapter(this)
         binding.viewPager.adapter = pageAdapter
         binding.bottomNav.setOnItemSelectedListener {
             val position = getPositionFromMenuId(it.itemId)
@@ -48,8 +40,14 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
 
     }
 
-    class PageAdapter(activity: FragmentActivity, private val fragments: List<Fragment>) :
-        FragmentStateAdapter(activity) {
+    class PageAdapter(activity: FragmentActivity) : FragmentStateAdapter(activity) {
+        private val fragments = listOf(
+            HomeFragment.newInstance(),
+            ProjectFragment.newInstance(),
+            TreeFragment.newInstance(),
+            NavFragment.newInstance(),
+            ChapterFragment.newInstance(),
+        )
 
         override fun createFragment(position: Int) = fragments[position]
         override fun getItemCount() = fragments.size

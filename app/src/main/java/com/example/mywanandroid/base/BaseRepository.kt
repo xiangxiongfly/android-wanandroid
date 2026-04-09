@@ -1,23 +1,23 @@
 package com.example.mywanandroid.base
 
 import com.example.mywanandroid.data.model.BaseResponse
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.flowOn
+import com.example.mywanandroid.data.state.Resource
+import com.example.mywanandroid.networks.exceptions.NetworkHandler
 
 open class BaseRepository {
 
-    fun <T> handleRemoteData(request: suspend () -> BaseResponse<T>) = flow {
-        val res = request()
-        if (res.isSuccessful()) {
-            emit("chengg")
-        } else {
-
+    suspend fun <T> handleRemote(apiCall: suspend () -> BaseResponse<T>): Resource<T> {
+        return try {
+            val res = apiCall()
+            if (res.isSuccessful()) {
+                Resource.Success(res.data)
+            } else {
+                Resource.Error(res.errorMsg, res.errorCode)
+            }
+        } catch (e: Exception) {
+            val exception = NetworkHandler.handleException(e)
+            Resource.Error(exception.errMsg, exception.errCode)
         }
-
-    }.catch {
-
-    }.flowOn(Dispatchers.IO)
+    }
 
 }
