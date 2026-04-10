@@ -4,6 +4,7 @@ import com.example.mywanandroid.networks.NetworkConfig.CONNECT_TIMEOUT
 import com.example.mywanandroid.networks.NetworkConfig.READ_TIMEOUT
 import com.example.mywanandroid.networks.NetworkConfig.WRITE_TIMEOUT
 import com.example.mywanandroid.networks.interceptor.HttpLogInterceptor
+import com.example.mywanandroid.networks.interceptor.UrlInterceptor
 import com.hjq.gson.factory.GsonFactory
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -17,6 +18,7 @@ object NetworkManager {
             .readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIMEOUT, TimeUnit.SECONDS)
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
+            .addInterceptor(UrlInterceptor())
             .addInterceptor(HttpLogInterceptor())
             .build()
     }

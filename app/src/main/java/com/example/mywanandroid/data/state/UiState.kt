@@ -8,7 +8,7 @@ sealed class UiState<out T> {
     object Loading : UiState<Nothing>()
 
     // 成功
-      class Success<out T>(val data: T) : UiState<T>()
+    data class Success<out T>(val data: T) : UiState<T>()
 
     // 空数据
     object Empty : UiState<Nothing>()

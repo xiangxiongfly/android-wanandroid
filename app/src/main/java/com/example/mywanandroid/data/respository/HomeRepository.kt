@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class HomeRepo(private val remote: HomeRemote = HomeRemote()) : BaseRepository() {
+class HomeRepository(private val remote: HomeRemote = HomeRemote()) : BaseRepository() {
 
     fun getBanner() = flow {
         when (val result = remote.getBanner()) {
@@ -20,6 +20,20 @@ class HomeRepo(private val remote: HomeRemote = HomeRemote()) : BaseRepository()
                 emit(Resource.Error(result.errMsg, result.errCode))
             }
         }
+    }.flowOn(Dispatchers.IO)
+
+    fun getArticleList(page: Int) = flow {
+        when (val result = remote.getArticleList(page)) {
+            is RemoteResult.Success -> {
+                emit(Resource.Success(result.data))
+            }
+
+            is RemoteResult.Error -> {
+                emit(Resource.Error(result.errMsg, result.errCode))
+            }
+        }
+
+        emit(TODO())
     }.flowOn(Dispatchers.IO)
 
 }

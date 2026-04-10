@@ -11,7 +11,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
     private val viewModel: HomeViewModel by viewModels()
 
     override fun initViews() {
-        Log.e("TAG", "HomeFragment onCreateView")
+
     }
 
     override fun initData(savedInstanceState: Bundle?) {
@@ -29,6 +29,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
 
                     is UiState.Success -> {
                         Log.e("TAG", "success ${it.data}")
+
                     }
 
                     is UiState.Error -> {
@@ -43,7 +44,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
             }
         }
     }
-
 
     companion object {
         @JvmStatic
