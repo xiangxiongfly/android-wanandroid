@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import com.example.mywanandroid.common.dialog.LoadingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -18,6 +19,8 @@ abstract class BaseFragment<VB : ViewBinding>(private val inflate: (LayoutInflat
     private var _binding: VB? = null
     val binding: VB
         get() = _binding ?: throw IllegalStateException("ViewBinding没有初始化")
+
+    private val loadingDialog by lazy { LoadingDialog(requireContext()) }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -71,4 +74,12 @@ abstract class BaseFragment<VB : ViewBinding>(private val inflate: (LayoutInflat
         viewLifecycleOwner.lifecycleScope.launch(Dispatchers.Main) {
             block()
         }
+
+    fun showLoading() {
+        loadingDialog.show()
+    }
+
+    fun hideLoading() {
+        loadingDialog.dismiss()
+    }
 }

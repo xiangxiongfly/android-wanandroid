@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="@dimen/app_padding">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="16sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/item_padding"
+        android:orientation="horizontal">
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/tv_super_chapter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textColor="@color/super_chapter"
+            android:textSize="12sp"
+            app:shape_radius="4dp"
+            app:shape_strokeColor="@color/super_chapter"
+            app:shape_strokeSize="1dp"
+            tools:text="superChapter" />
+
+        <com.hjq.shape.view.ShapeTextView
+            android:id="@+id/tv_author"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/item_padding"
+            android:padding="4dp"
+            android:textColor="@color/author"
+            android:textSize="12sp"
+            app:shape_radius="4dp"
+            app:shape_strokeColor="@color/author"
+            app:shape_strokeSize="1dp"
+            tools:text="author" />
+
+        <Space style="@style/SpaceStyles" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/item_padding"
+        android:textColor="@color/date"
+        android:textSize="12sp"
+        tools:text="date" />
+</LinearLayout>

@@ -73,4 +73,19 @@ dependencies {
     // RecyclerView
     implementation("io.github.cymchad:BaseRecyclerViewAdapterHelper4:4.3.4")
 
+    // Shape
+    implementation("com.github.getActivity:ShapeView:10.0")
+    implementation("com.github.getActivity:ShapeDrawable:3.3")
+
+    // Toast
+    implementation("com.github.getActivity:Toaster:15.0")
+
+    // 轮播图
+    implementation("com.github.zhpanvip:bannerviewpager:3.5.15")
+
+    // Flex
+    implementation("com.google.android.flexbox:flexbox:3.0.0")
+
+    // TitleBar
+    implementation("com.github.getActivity:TitleBar:10.8")
 }

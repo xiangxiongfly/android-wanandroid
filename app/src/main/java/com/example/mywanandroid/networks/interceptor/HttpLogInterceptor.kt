@@ -1,6 +1,6 @@
 package com.example.mywanandroid.networks.interceptor
 
-import com.example.mywanandroid.utils.LogUtils
+import com.example.mywanandroid.common.utils.LogUtils
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response

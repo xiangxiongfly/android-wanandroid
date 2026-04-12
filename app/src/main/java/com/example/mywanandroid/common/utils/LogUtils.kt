@@ -1,4 +1,4 @@
-package com.example.mywanandroid.utils
+package com.example.mywanandroid.common.utils
 
 import android.util.Log
 

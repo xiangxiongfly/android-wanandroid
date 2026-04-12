@@ -7,6 +7,16 @@
     android:orientation="vertical"
     tools:context=".ui.MainActivity">
 
+    <com.hjq.bar.TitleBar
+        android:id="@+id/title_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        app:leftIcon="@drawable/ic_left_menu"
+        app:rightIcon="@drawable/ic_search"
+        app:titleColor="@color/white"
+        app:titleGravity="left" />
+
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"

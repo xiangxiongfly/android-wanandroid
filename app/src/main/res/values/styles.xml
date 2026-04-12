@@ -1,7 +1,27 @@
 <resources>
 
-    <style name="Widget.Theme.Mywanandroid.MyView" parent="">
-        <item name="android:background">@color/gray_400</item>
-        <item name="exampleColor">@color/light_blue_400</item>
+    <style name="SpaceStyles">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
     </style>
+
+    <style name="BaseDialogStyle">
+        <!--是否显示Title -->
+        <item name="android:windowNoTitle">true</item>
+        <!--Dialog中Window的背景颜色-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--Dialog背景颜色-->
+        <item name="android:background">@android:color/transparent</item>
+        <!--去除边框-->
+        <item name="android:windowFrame">@null</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否半透明-->
+        <item name="android:windowIsTranslucent">true</item>
+        <!-- ActionMode 覆盖 Actionbar，不顶下来 -->
+        <item name="windowActionModeOverlay">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
 </resources>

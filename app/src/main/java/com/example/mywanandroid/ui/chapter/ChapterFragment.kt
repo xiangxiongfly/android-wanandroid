@@ -1,26 +1,51 @@
 package com.example.mywanandroid.ui.chapter
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import com.example.mywanandroid.R
+import androidx.fragment.app.viewModels
 import com.example.mywanandroid.base.BaseFragment
+import com.example.mywanandroid.common.utils.ToastUtils.showToast
+import com.example.mywanandroid.data.state.UiState
 import com.example.mywanandroid.databinding.FragmentChapterBinding
 
 
 class ChapterFragment : BaseFragment<FragmentChapterBinding>(FragmentChapterBinding::inflate) {
-    override fun initViews() {
-
-    }
-
-    override fun initData(savedInstanceState: Bundle?) {
-
-    }
+    private val viewModel: ChapterViewModel by viewModels()
+    private lateinit var adapter: ChapterAdapter
 
     companion object {
         @JvmStatic
         fun newInstance() = ChapterFragment()
     }
+
+    override fun initViews() {
+        adapter = ChapterAdapter()
+        binding.rvChapter.adapter = adapter
+    }
+
+    override fun initData(savedInstanceState: Bundle?) {
+        setupObserves()
+    }
+
+    private fun setupObserves() {
+        launch {
+            viewModel.state.collect {
+                when (it) {
+                    is UiState.Loading -> showLoading()
+
+                    is UiState.Success -> {
+                        hideLoading()
+                        adapter.submitList(it.data)
+                    }
+
+                    is UiState.Error -> {
+                        hideLoading()
+                        showToast(it.errMsg)
+                    }
+
+                    else -> {}
+                }
+            }
+        }
+    }
+
 }

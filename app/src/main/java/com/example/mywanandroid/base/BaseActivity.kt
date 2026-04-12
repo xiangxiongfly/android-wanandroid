@@ -1,23 +1,29 @@
 package com.example.mywanandroid.base
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.viewbinding.ViewBinding
+import com.example.mywanandroid.common.dialog.LoadingDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class BaseActivity<VB : ViewBinding>(private val inflate: (LayoutInflater) -> VB) :
     AppCompatActivity() {
+    protected lateinit var context: Context
     private var _binding: VB? = null
     val binding: VB
         get() = _binding ?: throw IllegalStateException("ViewBinding没有初始化")
 
+    private val loadingDialog by lazy { LoadingDialog(context) }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        context = this
         _binding = inflate(layoutInflater)
         setContentView(binding.root)
         intent?.let {
@@ -53,4 +59,11 @@ abstract class BaseActivity<VB : ViewBinding>(private val inflate: (LayoutInflat
             block()
         }
 
+    fun showLoading() {
+        loadingDialog.show()
+    }
+
+    fun hideLoading() {
+        loadingDialog.dismiss()
+    }
 }

@@ -9,28 +9,28 @@ const val LOAD_TYPE_LOAD_MORE = 2
 @IntDef(LOAD_TYPE_INITIAL, LOAD_TYPE_REFRESH, LOAD_TYPE_LOAD_MORE)
 annotation class LoadType
 
-sealed class ListState<out T> {
+sealed class ListUiState<out T> {
     // 初始状态
-    object Idle : ListState<Nothing>()
+    object Idle : ListUiState<Nothing>()
 
     // 加载中
-    object Loading : ListState<Nothing>()
-    object Refreshing : ListState<Nothing>()
-    object LoadingMore : ListState<Nothing>()
+    object Loading : ListUiState<Nothing>()
+    object Refreshing : ListUiState<Nothing>()
+    object LoadingMore : ListUiState<Nothing>()
 
     // 加载成功
     data class Success<T>(
         @LoadType val loadType: Int,
         val items: List<T>,
-    ) : ListState<T>()
+    ) : ListUiState<T>()
 
     // 加载失败
     data class Error(
         @LoadType val loadType: Int,
         val errMsg: String,
         val errCode: Int? = null,
-    ) : ListState<Nothing>()
+    ) : ListUiState<Nothing>()
 
     // 空数据
-    object Empty : ListState<Nothing>()
+    object Empty : ListUiState<Nothing>()
 }

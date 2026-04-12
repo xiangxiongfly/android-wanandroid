@@ -13,6 +13,7 @@ import com.example.mywanandroid.ui.project.ProjectFragment
 import com.example.mywanandroid.ui.tree.TreeFragment
 
 class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::inflate) {
+    private val titles = listOf("首页", "项目", "体系", "导航", "公众号")
 
     override fun initViews() {
         binding.viewPager.isUserInputEnabled = false
@@ -20,9 +21,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         binding.viewPager.adapter = pageAdapter
         binding.bottomNav.setOnItemSelectedListener {
             val position = getPositionFromMenuId(it.itemId)
+            binding.titleBar.title = titles[position]
             binding.viewPager.setCurrentItem(position, false);
             return@setOnItemSelectedListener true
         }
+        binding.titleBar.title = titles[0]
     }
 
     private fun getPositionFromMenuId(menuId: Int): Int {
