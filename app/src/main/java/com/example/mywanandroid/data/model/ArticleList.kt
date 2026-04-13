@@ -16,5 +16,6 @@ data class Article(
     val niceDate: String,
     val shareUser: String,
     val author: String,
-    val link: String
+    val link: String,
+    val collect: Boolean
 )

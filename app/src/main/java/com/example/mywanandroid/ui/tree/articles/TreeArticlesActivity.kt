@@ -1,4 +1,4 @@
-package com.example.mywanandroid.ui.tree.details
+package com.example.mywanandroid.ui.tree.articles
 
 import android.content.Context
 import android.content.Intent
@@ -9,18 +9,18 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.mywanandroid.base.BaseActivity
 import com.example.mywanandroid.data.model.TreeChild
-import com.example.mywanandroid.databinding.ActivityTreeArticleListBinding
+import com.example.mywanandroid.databinding.ActivityTreeArticlesBinding
 import com.google.android.material.tabs.TabLayoutMediator
 
-class TreeArticleListActivity : BaseActivity<ActivityTreeArticleListBinding>(ActivityTreeArticleListBinding::inflate) {
+class TreeArticlesActivity : BaseActivity<ActivityTreeArticlesBinding>(ActivityTreeArticlesBinding::inflate) {
 
     private var children = mutableListOf<TreeChild>()
-    private val fragments = mutableListOf<TreeArticleListFragment>()
+    private val fragments = mutableListOf<TreeArticlesFragment>()
     private val titles = mutableListOf<String>()
 
     companion object {
         fun actionStart(context: Context, children: ArrayList<TreeChild>) {
-            context.startActivity(Intent(context, TreeArticleListActivity::class.java).apply {
+            context.startActivity(Intent(context, TreeArticlesActivity::class.java).apply {
                 putExtra("children", children)
             })
         }
@@ -38,7 +38,7 @@ class TreeArticleListActivity : BaseActivity<ActivityTreeArticleListBinding>(Act
         Log.e("TAG", "children= ${children}")
         for (child in children) {
             titles.add(child.name)
-            fragments.add(TreeArticleListFragment.newInstance(child.id))
+            fragments.add(TreeArticlesFragment.newInstance(child.id))
         }
         binding.viewPager.adapter = PageAdapter(this, fragments)
         TabLayoutMediator(

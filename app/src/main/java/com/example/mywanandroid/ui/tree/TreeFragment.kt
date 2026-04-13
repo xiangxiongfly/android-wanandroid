@@ -9,7 +9,7 @@ import com.example.mywanandroid.common.widgets.decoration.LinearDividerDecoratio
 import com.example.mywanandroid.data.model.TreeChild
 import com.example.mywanandroid.data.state.ListUiState
 import com.example.mywanandroid.databinding.FragmentTreeBinding
-import com.example.mywanandroid.ui.tree.details.TreeArticleListActivity
+import com.example.mywanandroid.ui.tree.articles.TreeArticlesActivity
 
 class TreeFragment : BaseFragment<FragmentTreeBinding>(FragmentTreeBinding::inflate) {
     private val viewModel: TreeViewModel by viewModels()
@@ -23,7 +23,7 @@ class TreeFragment : BaseFragment<FragmentTreeBinding>(FragmentTreeBinding::infl
     override fun initViews() {
         adapter = TreeAdapter().apply {
             setOnItemClickListener { adapter, view, i ->
-                TreeArticleListActivity.actionStart(context, items[i].children as ArrayList<TreeChild>)
+                TreeArticlesActivity.actionStart(context, items[i].children as ArrayList<TreeChild>)
             }
         }
         binding.rvTree.addItemDecoration(LinearDividerDecoration(dividerSize = 2F.dp))

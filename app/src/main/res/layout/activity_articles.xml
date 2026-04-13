@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.articles.ArticlesActivity">
+
+    <com.hjq.bar.TitleBar
+        android:id="@+id/title_bar"
+        style="@style/TitleBarStyle.Back" />
+
+    <com.scwang.smart.refresh.layout.SmartRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:srlEnableLoadMore="true"
+        app:srlEnableRefresh="false">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_article"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
+
+</LinearLayout>

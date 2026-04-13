@@ -3,6 +3,7 @@ package com.example.mywanandroid.networks
 import com.example.mywanandroid.networks.NetworkConfig.CONNECT_TIMEOUT
 import com.example.mywanandroid.networks.NetworkConfig.READ_TIMEOUT
 import com.example.mywanandroid.networks.NetworkConfig.WRITE_TIMEOUT
+import com.example.mywanandroid.networks.interceptor.CookieInterceptor
 import com.example.mywanandroid.networks.interceptor.HttpLogInterceptor
 import com.example.mywanandroid.networks.interceptor.UrlInterceptor
 import com.hjq.gson.factory.GsonFactory
@@ -20,6 +21,7 @@ object NetworkManager {
             .connectTimeout(CONNECT_TIMEOUT, TimeUnit.SECONDS)
             .addInterceptor(UrlInterceptor())
             .addInterceptor(HttpLogInterceptor())
+            .addInterceptor(CookieInterceptor())
             .build()
     }
 

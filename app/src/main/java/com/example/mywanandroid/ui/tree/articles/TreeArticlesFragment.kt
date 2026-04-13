@@ -1,4 +1,4 @@
-package com.example.mywanandroid.ui.tree.details
+package com.example.mywanandroid.ui.tree.articles
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
@@ -7,11 +7,11 @@ import com.example.mywanandroid.common.widgets.decoration.LinearDividerDecoratio
 import com.example.mywanandroid.data.state.LOAD_TYPE_LOAD_MORE
 import com.example.mywanandroid.data.state.LOAD_TYPE_REFRESH
 import com.example.mywanandroid.data.state.ListUiState
-import com.example.mywanandroid.databinding.FragmentTreeArticleListBinding
+import com.example.mywanandroid.databinding.FragmentTreeArticlesBinding
 import com.example.mywanandroid.ui.home.ArticleAdapter
 
-class TreeArticleListFragment : BaseFragment<FragmentTreeArticleListBinding>(FragmentTreeArticleListBinding::inflate) {
-    private val viewModel: TreeArticleListViewModel by viewModels { TreeArticleListViewModel.Factory(id) }
+class TreeArticlesFragment : BaseFragment<FragmentTreeArticlesBinding>(FragmentTreeArticlesBinding::inflate) {
+    private val viewModel: TreeArticlesViewModel by viewModels { TreeArticlesViewModel.Factory(id) }
     private lateinit var adapter: ArticleAdapter
 
     private var id = -1
@@ -36,7 +36,7 @@ class TreeArticleListFragment : BaseFragment<FragmentTreeArticleListBinding>(Fra
 
     private fun setupObserves() {
         launch {
-            viewModel.articleListState.collect {
+            viewModel.articlesState.collect {
                 when (it) {
                     is ListUiState.Success -> {
                         if (it.loadType == LOAD_TYPE_REFRESH) {
@@ -64,7 +64,7 @@ class TreeArticleListFragment : BaseFragment<FragmentTreeArticleListBinding>(Fra
 
     companion object {
         fun newInstance(id: Int) =
-            TreeArticleListFragment().apply {
+            TreeArticlesFragment().apply {
                 arguments = Bundle().apply {
                     putInt("id", id)
                 }

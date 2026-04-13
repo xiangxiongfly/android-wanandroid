@@ -24,4 +24,21 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="CircleStyle">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="TitleBarStyle">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="leftTitleColor">@color/white</item>
+        <item name="titleColor">@color/white</item>
+    </style>
+
+    <style name="TitleBarStyle.Back">
+        <item name="leftTitle">返回</item>
+        <item name="leftIcon">@drawable/ic_back</item>
+    </style>
 </resources>

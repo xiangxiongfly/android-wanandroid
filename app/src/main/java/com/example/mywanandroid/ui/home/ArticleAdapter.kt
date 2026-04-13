@@ -31,6 +31,10 @@ class ArticleAdapter : BaseQuickAdapter<Article, QuickViewHolder>() {
                 if (TextUtils.isEmpty(it.author)) it.shareUser else it.author
             )
             holder.setText(R.id.tv_date, it.niceDate)
+            holder.setImageResource(
+                R.id.iv_collect,
+                if (it.collect) R.drawable.ic_collected else R.drawable.ic_unselect
+            )
         }
     }
 }

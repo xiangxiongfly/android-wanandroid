@@ -6,6 +6,7 @@ import com.example.mywanandroid.base.BaseFragment
 import com.example.mywanandroid.common.utils.ToastUtils.showToast
 import com.example.mywanandroid.data.state.UiState
 import com.example.mywanandroid.databinding.FragmentChapterBinding
+import com.example.mywanandroid.ui.articles.ArticlesActivity
 
 
 class ChapterFragment : BaseFragment<FragmentChapterBinding>(FragmentChapterBinding::inflate) {
@@ -18,7 +19,12 @@ class ChapterFragment : BaseFragment<FragmentChapterBinding>(FragmentChapterBind
     }
 
     override fun initViews() {
-        adapter = ChapterAdapter()
+        adapter = ChapterAdapter().apply {
+            setOnItemClickListener { _, _, i ->
+                val item = items[i]
+                ArticlesActivity.actionStart(context, item.name, item.id)
+            }
+        }
         binding.rvChapter.adapter = adapter
     }
 

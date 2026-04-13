@@ -22,4 +22,17 @@ class ChapterRepository(val chapterApi: ChapterApi = NetworkManager.create(Chapt
             }
         }
     }.flowOn(Dispatchers.IO)
+
+    fun getChapterArticles(id: Int, page: Int) = flow {
+        when (val result = handleRemote { chapterApi.getChapterArticles(id, page) }) {
+            is RemoteResult.Success -> {
+                emit(Resource.Success(result.data))
+            }
+
+            is RemoteResult.Error -> {
+                emit(Resource.Error(result.errMsg, result.errCode))
+            }
+        }
+    }.flowOn(Dispatchers.IO)
+
 }

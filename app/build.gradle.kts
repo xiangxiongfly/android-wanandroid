@@ -54,6 +54,10 @@ dependencies {
     implementation("androidx.activity:activity-ktx:1.13.0")
     implementation("androidx.fragment:fragment-ktx:1.8.6")
 
+    // DataStore
+    implementation("androidx.datastore:datastore:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
+
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)

@@ -1,4 +1,4 @@
-package com.example.mywanandroid.ui.tree.details
+package com.example.mywanandroid.ui.tree.articles
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -12,10 +12,10 @@ import com.example.mywanandroid.data.state.Resource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class TreeArticleListViewModel(private val id: Int) : BaseViewModel() {
+class TreeArticlesViewModel(private val id: Int) : BaseViewModel() {
     private val repo by lazy { TreeRepository() }
-    private val _articleListState = MutableStateFlow<ListUiState<Article>>(ListUiState.Idle)
-    val articleListState = _articleListState.asStateFlow()
+    private val _articlesState = MutableStateFlow<ListUiState<Article>>(ListUiState.Idle)
+    val articlesState = _articlesState.asStateFlow()
     private var page = FIRST_PAGE
 
     companion object {
@@ -24,8 +24,8 @@ class TreeArticleListViewModel(private val id: Int) : BaseViewModel() {
 
     class Factory(private val id: Int) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass.isAssignableFrom(TreeArticleListViewModel::class.java)) {
-                return TreeArticleListViewModel(id) as T
+            if (modelClass.isAssignableFrom(TreeArticlesViewModel::class.java)) {
+                return TreeArticlesViewModel(id) as T
             }
             throw IllegalArgumentException("Unknown ViewModel class")
         }
@@ -33,17 +33,17 @@ class TreeArticleListViewModel(private val id: Int) : BaseViewModel() {
 
     fun refreshArticleList() {
         launchIO {
-            _articleListState.value = ListUiState.Refreshing
+            _articlesState.value = ListUiState.Refreshing
             page = FIRST_PAGE
             repo.getTreeArticleList(page, id).collect {
                 when (it) {
                     is Resource.Success -> {
-                        _articleListState.value = ListUiState.Success(LOAD_TYPE_REFRESH, it.data.datas)
+                        _articlesState.value = ListUiState.Success(LOAD_TYPE_REFRESH, it.data.datas)
                         page++
                     }
 
                     is Resource.Error -> {
-                        _articleListState.value = ListUiState.Error(LOAD_TYPE_REFRESH, it.errMsg, it.errCode)
+                        _articlesState.value = ListUiState.Error(LOAD_TYPE_REFRESH, it.errMsg, it.errCode)
                     }
                 }
             }
@@ -52,16 +52,16 @@ class TreeArticleListViewModel(private val id: Int) : BaseViewModel() {
 
     fun loadMoreArticleList() {
         launchIO {
-            _articleListState.value = ListUiState.Refreshing
+            _articlesState.value = ListUiState.Refreshing
             repo.getTreeArticleList(page, id).collect {
                 when (it) {
                     is Resource.Success -> {
-                        _articleListState.value = ListUiState.Success(LOAD_TYPE_LOAD_MORE, it.data.datas)
+                        _articlesState.value = ListUiState.Success(LOAD_TYPE_LOAD_MORE, it.data.datas)
                         page++
                     }
 
                     is Resource.Error -> {
-                        _articleListState.value = ListUiState.Error(LOAD_TYPE_LOAD_MORE, it.errMsg, it.errCode)
+                        _articlesState.value = ListUiState.Error(LOAD_TYPE_LOAD_MORE, it.errMsg, it.errCode)
                     }
                 }
             }
