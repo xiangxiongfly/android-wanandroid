@@ -7,13 +7,16 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.mywanandroid.R
 import com.example.mywanandroid.base.BaseActivity
+import com.example.mywanandroid.common.dialog.LogoutDialog
 import com.example.mywanandroid.common.utils.showToast
+import com.example.mywanandroid.data.respository.local.CookieDataStore
 import com.example.mywanandroid.data.respository.local.UserDataStore
 import com.example.mywanandroid.databinding.ActivityMainBinding
 import com.example.mywanandroid.databinding.DrawerHeaderBinding
 import com.example.mywanandroid.ui.articles.ArticlesActivity
 import com.example.mywanandroid.ui.chapter.ChapterFragment
 import com.example.mywanandroid.ui.home.HomeFragment
+import com.example.mywanandroid.ui.info.InfoActivity
 import com.example.mywanandroid.ui.login.LoginActivity
 import com.example.mywanandroid.ui.nav.NavFragment
 import com.example.mywanandroid.ui.project.ProjectFragment
@@ -61,15 +64,19 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 }
 
                 R.id.info -> {
-
+                    InfoActivity.actionStart(context)
                 }
 
                 R.id.exit -> {
                     if (UserDataStore.getInstance().isLogin()) {
-                        launch {
-                            UserDataStore.getInstance().clear()
-                        }
-                        binding.drawerLayout.close()
+                        LogoutDialog(context).setOnConfirmListener {
+                            launch {
+                                headerBinding.tvNickname.text = "请登录"
+                                UserDataStore.getInstance().clear()
+                                CookieDataStore.getInstance().clear()
+                            }
+                            binding.drawerLayout.close()
+                        }.show()
                     }
                 }
             }
@@ -77,6 +84,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
         }
         val headerView = binding.leftNav.getHeaderView(0)
         headerBinding = DrawerHeaderBinding.bind(headerView)
+        headerBinding.tvNickname.setOnClickListener {
+            if (!UserDataStore.getInstance().isLogin()) {
+                LoginActivity.actionStart(this@MainActivity)
+            }
+        }
     }
 
     private fun getPositionFromMenuId(menuId: Int): Int {
@@ -91,15 +103,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        val user = UserDataStore.getInstance().getUser()
-        if (user == null) {
-            headerBinding.tvNickname.text = "请登录"
-            headerBinding.tvNickname.setOnClickListener {
-                LoginActivity.actionStart(this@MainActivity)
-            }
+        if (UserDataStore.getInstance().isLogin()) {
+            val user = UserDataStore.getInstance().getUser()
+            headerBinding.tvNickname.text = user?.username
         } else {
-            headerBinding.tvNickname.text = user.username
-            headerBinding.tvNickname.setOnClickListener(null)
+            headerBinding.tvNickname.text = null
         }
     }
 

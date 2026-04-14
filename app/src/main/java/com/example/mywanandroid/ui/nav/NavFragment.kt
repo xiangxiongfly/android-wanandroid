@@ -8,6 +8,7 @@ import com.example.mywanandroid.data.model.NavArticle
 import com.example.mywanandroid.data.state.UiState
 import com.example.mywanandroid.databinding.FragmentNavBinding
 import com.example.mywanandroid.databinding.ItemNavTagBinding
+import com.example.mywanandroid.ui.webview.WebViewActivity
 
 class NavFragment : BaseFragment<FragmentNavBinding>(FragmentNavBinding::inflate) {
     private val viewModel: NavViewModel by viewModels()
@@ -44,6 +45,9 @@ class NavFragment : BaseFragment<FragmentNavBinding>(FragmentNavBinding::inflate
         binding.fblTag.removeAllViews()
         for (article in articles) {
             val tag = ItemNavTagBinding.inflate(layoutInflater, binding.fblTag, false)
+            tag.root.setOnClickListener {
+                WebViewActivity.actionStart(requireContext(), article.title, article.link)
+            }
             tag.root.text = article.title
             binding.fblTag.addView(tag.root)
         }

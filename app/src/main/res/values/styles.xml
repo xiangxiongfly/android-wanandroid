@@ -6,7 +6,7 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
-    <style name="BaseDialogStyle">
+    <style name="DialogStyle">
         <!--是否显示Title -->
         <item name="android:windowNoTitle">true</item>
         <!--Dialog中Window的背景颜色-->
@@ -21,7 +21,12 @@
         <item name="android:windowIsTranslucent">true</item>
         <!-- ActionMode 覆盖 Actionbar，不顶下来 -->
         <item name="windowActionModeOverlay">true</item>
+        <!-- 遮挡物 -->
         <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name="DialogStyle.Normal">
+        <item name="android:windowMinWidthMinor">80%</item>
     </style>
 
     <style name="CircleStyle">

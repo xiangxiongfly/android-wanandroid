@@ -92,4 +92,7 @@ dependencies {
 
     // TitleBar
     implementation("com.github.getActivity:TitleBar:10.8")
+
+    // WebView
+    implementation("io.github.justson:agentweb-core:v5.1.1-androidx")
 }

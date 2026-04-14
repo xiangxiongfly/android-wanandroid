@@ -23,7 +23,8 @@ class TreeFragment : BaseFragment<FragmentTreeBinding>(FragmentTreeBinding::infl
     override fun initViews() {
         adapter = TreeAdapter().apply {
             setOnItemClickListener { adapter, view, i ->
-                TreeArticlesActivity.actionStart(context, items[i].children as ArrayList<TreeChild>)
+                val item = items[i]
+                TreeArticlesActivity.actionStart(context, item.name, item.children as ArrayList<TreeChild>)
             }
         }
         binding.rvTree.addItemDecoration(LinearDividerDecoration(dividerSize = 2F.dp))

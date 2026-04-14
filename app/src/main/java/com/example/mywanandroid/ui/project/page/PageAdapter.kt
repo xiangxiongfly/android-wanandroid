@@ -30,8 +30,8 @@ class PageAdapter : BaseQuickAdapter<ProjectArticle, QuickViewHolder>() {
             holder.setText(R.id.tv_desc, Html.fromHtml(it.desc, Html.FROM_HTML_MODE_LEGACY))
             holder.setText(R.id.tv_author, it.author)
             holder.setText(R.id.tv_date, it.niceDate)
-            holder.getView<ImageView>(R.id.iv).load(it.envelopePic){
-                listener( onError = {req,ret -> Log.e("TAG","error ${req.data}")})
+            holder.getView<ImageView>(R.id.iv).load(it.envelopePic) {
+                listener(onError = { req, ret -> Log.e("TAG", "error ${req.data}") })
             }
 
         }

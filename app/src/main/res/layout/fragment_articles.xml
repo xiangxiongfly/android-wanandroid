@@ -5,7 +5,9 @@
     android:id="@+id/refresh_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.tree.articles.TreeArticlesFragment">
+    app:srlEnableLoadMore="true"
+    app:srlEnableRefresh="false"
+    tools:context=".ui.articles.ArticlesActivity">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_article"
@@ -13,5 +15,4 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
 </com.scwang.smart.refresh.layout.SmartRefreshLayout>

@@ -6,20 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.tree.articles.TreeArticlesActivity">
+    tools:context=".ui.info.InfoActivity">
 
     <com.hjq.bar.TitleBar
-        android:id="@+id/title_bar"
-        style="@style/TitleBarStyle.Back" />
+        style="@style/TitleBarStyle.Back"
+        app:title="信息" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:tabMode="scrollable" />
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager"
+    <TextView
+        android:id="@+id/tv_desc"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </LinearLayout>

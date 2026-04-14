@@ -10,6 +10,7 @@ import com.example.mywanandroid.data.state.LOAD_TYPE_LOAD_MORE
 import com.example.mywanandroid.data.state.LOAD_TYPE_REFRESH
 import com.example.mywanandroid.data.state.ListUiState
 import com.example.mywanandroid.databinding.FragmentPageBinding
+import com.example.mywanandroid.ui.webview.WebViewActivity
 
 class PageFragment : BaseFragment<FragmentPageBinding>(FragmentPageBinding::inflate) {
     private val viewModel: PageVewModel by viewModels()
@@ -36,7 +37,12 @@ class PageFragment : BaseFragment<FragmentPageBinding>(FragmentPageBinding::infl
     }
 
     override fun initViews() {
-        adapter = PageAdapter()
+        adapter = PageAdapter().apply {
+            setOnItemClickListener { adapter, view, i ->
+                val item = items[i]
+                WebViewActivity.actionStart(context, item.title, item.link)
+            }
+        }
         binding.rvArticle.addItemDecoration(LinearDividerDecoration())
         binding.rvArticle.adapter = adapter
         binding.refreshLayout.setOnRefreshListener { viewModel.refreshProjectArticles(lifecycleScope) }

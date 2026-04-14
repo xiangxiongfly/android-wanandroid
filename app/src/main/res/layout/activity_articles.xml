@@ -11,19 +11,8 @@
         android:id="@+id/title_bar"
         style="@style/TitleBarStyle.Back" />
 
-    <com.scwang.smart.refresh.layout.SmartRefreshLayout
-        android:id="@+id/refresh_layout"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:srlEnableLoadMore="true"
-        app:srlEnableRefresh="false">
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_article"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-    </com.scwang.smart.refresh.layout.SmartRefreshLayout>
-
+        android:layout_height="match_parent" />
 </LinearLayout>

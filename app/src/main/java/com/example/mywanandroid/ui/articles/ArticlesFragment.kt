@@ -1,4 +1,4 @@
-package com.example.mywanandroid.ui.home
+package com.example.mywanandroid.ui.articles
 
 import android.os.Bundle
 import androidx.fragment.app.viewModels
@@ -7,110 +7,94 @@ import com.example.mywanandroid.R
 import com.example.mywanandroid.base.BaseFragment
 import com.example.mywanandroid.common.utils.showToast
 import com.example.mywanandroid.common.widgets.decoration.LinearDividerDecoration
-import com.example.mywanandroid.data.model.Banner
-import com.example.mywanandroid.data.state.LOAD_TYPE_INITIAL
 import com.example.mywanandroid.data.state.LOAD_TYPE_LOAD_MORE
 import com.example.mywanandroid.data.state.LOAD_TYPE_REFRESH
 import com.example.mywanandroid.data.state.ListUiState
 import com.example.mywanandroid.data.state.UiState
-import com.example.mywanandroid.databinding.FragmentHomeBinding
-import com.example.mywanandroid.ui.home.banner.BannerAdapter
+import com.example.mywanandroid.databinding.FragmentArticlesBinding
+import com.example.mywanandroid.ui.home.ArticleAdapter
 import com.example.mywanandroid.ui.webview.WebViewActivity
 
-class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::inflate) {
-    private val viewModel: HomeViewModel by viewModels()
+class ArticlesFragment : BaseFragment<FragmentArticlesBinding>(FragmentArticlesBinding::inflate) {
+
+    private val viewModel: ArticlesViewModel by viewModels { ArticlesViewModel.Factory(id) }
     private lateinit var adapter: ArticleAdapter
-    private val bannerList = mutableListOf<Banner>()
+    private var id = -1
     private var collectPosition = -1
     private var uncollectPosition = -1
 
-    override fun initViews() {
-        setupViewPager()
-        setupList()
-    }
-
-    private fun setupViewPager() {
-        binding.bannerView.apply {
-            setAdapter(BannerAdapter())
-            setOnPageClickListener { view, i ->
-                val banner = bannerList[i]
-                WebViewActivity.actionStart(requireContext(), banner.title, banner.url)
+    companion object {
+        fun newInstance(id: Int) =
+            ArticlesFragment().apply {
+                arguments = Bundle().apply {
+                    putInt("id", id)
+                }
             }
-            registerLifecycleObserver(lifecycle)
-        }.create()
     }
 
-    private fun setupList() {
+    override fun initArguments(arguments: Bundle) {
+        super.initArguments(arguments)
+        id = arguments.getInt("id", -1)
+    }
+
+    override fun initViews() {
         adapter = ArticleAdapter().apply {
+            setCollectType(id == -1)
             setOnItemClickListener { adapter, view, i ->
                 val item = items[i]
                 WebViewActivity.actionStart(context, item.title, item.link)
             }
-            addOnItemChildClickListener(R.id.iv_collect, { _, _, position ->
+            addOnItemChildClickListener(R.id.iv_collect, { adapter, view, position ->
                 val item = items[position]
-                if (item.collect) {
+                if (id == -1) {
                     uncollectPosition = position
-                    viewModel.uncollectArticle(viewLifecycleOwner.lifecycleScope, item.id)
+                    viewModel.uncollectArticleWithCollection(viewLifecycleOwner.lifecycleScope, item.id, item.originId)
                 } else {
-                    collectPosition = position
-                    viewModel.collectArticle(viewLifecycleOwner.lifecycleScope, item.id)
+                    if (item.collect) {
+                        uncollectPosition = position
+                        viewModel.uncollectArticle(viewLifecycleOwner.lifecycleScope, item.id)
+                    } else {
+                        collectPosition = position
+                        viewModel.collectArticle(viewLifecycleOwner.lifecycleScope, item.id)
+                    }
                 }
             })
         }
-        binding.rvHome.addItemDecoration(LinearDividerDecoration())
-        binding.rvHome.adapter = adapter
-        binding.refreshLayout.setOnRefreshListener { viewModel.refreshArticles(viewLifecycleOwner.lifecycleScope) }
+        binding.rvArticle.addItemDecoration(LinearDividerDecoration())
+        binding.rvArticle.adapter = adapter
         binding.refreshLayout.setOnLoadMoreListener { viewModel.loadMoreArticles(viewLifecycleOwner.lifecycleScope) }
     }
 
     override fun initData(savedInstanceState: Bundle?) {
-        viewModel.getBanner(viewLifecycleOwner.lifecycleScope)
-        viewModel.loadArticles(viewLifecycleOwner.lifecycleScope)
+        viewModel.refreshArticles(viewLifecycleOwner.lifecycleScope)
         setupObserves()
     }
 
     private fun setupObserves() {
         launch {
-            viewModel.bannerState.collect {
+            viewModel.state.collect {
                 when (it) {
-                    is UiState.Success -> {
-                        bannerList.clear()
-                        bannerList.addAll(it.data)
-                        binding.bannerView.refreshData(bannerList)
-                    }
-
-                    else -> {
-                    }
-                }
-            }
-        }
-        launch {
-            viewModel.articlesState.collect {
-                when (it) {
-                    is ListUiState.Loading -> {
+                    is ListUiState.Refreshing -> {
                         showLoading()
                     }
 
                     is ListUiState.Success -> {
-                        hideLoading()
-                        if (it.loadType == LOAD_TYPE_INITIAL) {
+                        if (it.loadType == LOAD_TYPE_REFRESH) {
+                            hideLoading()
                             adapter.submitList(it.items)
-                        } else if (it.loadType == LOAD_TYPE_REFRESH) {
-                            adapter.submitList(it.items)
-                            binding.refreshLayout.finishRefresh()
                         } else if (it.loadType == LOAD_TYPE_LOAD_MORE) {
-                            adapter.addAll(it.items)
                             binding.refreshLayout.finishLoadMore()
+                            adapter.addAll(it.items)
                         }
                     }
 
                     is ListUiState.Error -> {
-                        hideLoading()
-                        if (binding.refreshLayout.isRefreshing) {
-                            binding.refreshLayout.finishRefresh()
-                        } else if (binding.refreshLayout.isLoading) {
+                        if (it.loadType == LOAD_TYPE_REFRESH) {
+                            hideLoading()
+                        } else if (it.loadType == LOAD_TYPE_LOAD_MORE) {
                             binding.refreshLayout.finishLoadMore()
                         }
+                        showToast(it.errMsg)
                     }
 
                     else -> {}
@@ -169,10 +153,30 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(FragmentHomeBinding::infl
                 }
             }
         }
-    }
+        launch {
+            viewModel.uncollectWithCollectionState.collect {
+                when (it) {
+                    is UiState.Loading -> {
+                        showLoading()
+                    }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() = HomeFragment()
+                    is UiState.Empty -> {
+                        hideLoading()
+                        showToast("取消成功")
+                        if (uncollectPosition != -1) {
+                            adapter.removeAt(uncollectPosition)
+                        }
+                        uncollectPosition = -1
+                    }
+
+                    is UiState.Error -> {
+                        hideLoading()
+                        showToast("取消失败")
+                    }
+
+                    else -> {}
+                }
+            }
+        }
     }
 }

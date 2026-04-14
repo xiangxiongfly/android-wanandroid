@@ -17,5 +17,7 @@ data class Article(
     val shareUser: String,
     val author: String,
     val link: String,
-    val collect: Boolean
+    val id: Int,
+    val originId: Int,
+    var collect: Boolean
 )

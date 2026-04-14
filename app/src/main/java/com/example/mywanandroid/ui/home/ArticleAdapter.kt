@@ -10,6 +10,12 @@ import com.example.mywanandroid.R
 import com.example.mywanandroid.data.model.Article
 
 class ArticleAdapter : BaseQuickAdapter<Article, QuickViewHolder>() {
+    private var collectType = false
+
+    fun setCollectType(collectType: Boolean) {
+        this.collectType = collectType
+    }
+
     override fun onCreateViewHolder(
         context: Context,
         parent: ViewGroup,
@@ -25,16 +31,27 @@ class ArticleAdapter : BaseQuickAdapter<Article, QuickViewHolder>() {
     ) {
         item?.let {
             holder.setText(R.id.tv_title, Html.fromHtml(it.title, Html.FROM_HTML_MODE_LEGACY))
-            holder.setText(R.id.tv_super_chapter, it.superChapterName)
+            holder.setText(
+                R.id.tv_super_chapter,
+                if (!TextUtils.isEmpty(it.superChapterName) && !TextUtils.isEmpty(it.chapterName)) it.superChapterName + "•" + it.chapterName
+                else if (!TextUtils.isEmpty(it.superChapterName)) it.superChapterName
+                else if (!TextUtils.isEmpty(it.chapterName)) it.chapterName
+                else ""
+            )
+            holder.setGone(R.id.tv_author, TextUtils.isEmpty(it.author) && TextUtils.isEmpty(it.shareUser))
             holder.setText(
                 R.id.tv_author,
                 if (TextUtils.isEmpty(it.author)) it.shareUser else it.author
             )
             holder.setText(R.id.tv_date, it.niceDate)
-            holder.setImageResource(
-                R.id.iv_collect,
-                if (it.collect) R.drawable.ic_collected else R.drawable.ic_unselect
-            )
+            if (collectType) {
+                holder.setImageResource(R.id.iv_collect, R.drawable.ic_collected)
+            } else {
+                holder.setImageResource(
+                    R.id.iv_collect,
+                    if (it.collect) R.drawable.ic_collected else R.drawable.ic_unselect
+                )
+            }
         }
     }
 }

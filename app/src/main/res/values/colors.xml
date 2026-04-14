@@ -20,4 +20,7 @@
     <color name="tag">#8a8a8a</color>
     <color name="nav_tag">#1989fa</color>
     <color name="nav_title_bg">#EDEDED</color>
+    <color name="cancel">#FF323233</color>
+    <color name="confirm">@color/colorPrimary</color>
+    <color name="line">#FF646566</color>
 </resources>
