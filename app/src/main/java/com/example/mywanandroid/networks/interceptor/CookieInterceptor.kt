@@ -10,7 +10,7 @@ class CookieInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val builder = chain.request().newBuilder()
         val cookieSet = CookieDataStore.getInstance().getCookieSet()
-        Log.e("TAG","cookieSet= ${cookieSet}")
+        Log.e("TAG", "cookieSet= ${cookieSet}")
         cookieSet?.let {
             for (cookie in it) {
                 builder.addHeader("Cookie", cookie)
@@ -25,9 +25,8 @@ class CookieInterceptor : Interceptor {
                 cookieSet.add(cookie)
             }
             runBlocking { CookieDataStore.getInstance().saveCookieSet(cookieSet) }
-
             val cookieSet2 = CookieDataStore.getInstance().getCookieSet()
-            Log.e("TAG","cookieSet2= ${cookieSet2}")
+            Log.e("TAG", "cookieSet2= ${cookieSet2}")
         }
         return originalResponse
     }

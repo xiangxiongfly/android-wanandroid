@@ -1,6 +1,7 @@
 package com.example.mywanandroid.base
 
 import android.app.Application
+import com.example.mywanandroid.common.utils.MMKVUtils
 import com.example.mywanandroid.common.utils.ToastUtils
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
@@ -26,5 +27,6 @@ class BaseApp : Application() {
         super.onCreate()
         instance = this
         ToastUtils.init(this)
+        MMKVUtils.init(this)
     }
 }

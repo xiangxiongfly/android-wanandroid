@@ -10,6 +10,10 @@ import retrofit2.http.Path
 
 interface ArticleApi {
 
+    @FormUrlEncoded
+    @POST("article/query/{page}/json")
+    suspend fun queryArticles(@Path("page") page: Int, @Field("k") k: String): BaseResponse<ArticleList>
+
     @GET("wxarticle/list/{id}/{page}/json")
     suspend fun getChapterArticles(@Path("id") id: Int, @Path("page") page: Int): BaseResponse<ArticleList>
 

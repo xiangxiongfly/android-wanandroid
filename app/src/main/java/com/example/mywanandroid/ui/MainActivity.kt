@@ -14,12 +14,14 @@ import com.example.mywanandroid.data.respository.local.UserDataStore
 import com.example.mywanandroid.databinding.ActivityMainBinding
 import com.example.mywanandroid.databinding.DrawerHeaderBinding
 import com.example.mywanandroid.ui.articles.ArticlesActivity
+import com.example.mywanandroid.ui.articles.ArticlesActivity.Companion.TYPE_COLLECTION
 import com.example.mywanandroid.ui.chapter.ChapterFragment
 import com.example.mywanandroid.ui.home.HomeFragment
 import com.example.mywanandroid.ui.info.InfoActivity
 import com.example.mywanandroid.ui.login.LoginActivity
 import com.example.mywanandroid.ui.nav.NavFragment
 import com.example.mywanandroid.ui.project.ProjectFragment
+import com.example.mywanandroid.ui.search.SearchActivity
 import com.example.mywanandroid.ui.tree.TreeFragment
 import com.hjq.bar.OnTitleBarListener
 import com.hjq.bar.TitleBar
@@ -41,6 +43,11 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                 super.onLeftClick(titleBar)
                 binding.drawerLayout.open()
             }
+
+            override fun onRightClick(titleBar: TitleBar?) {
+                super.onRightClick(titleBar)
+                SearchActivity.actionStart(context)
+            }
         })
         binding.content.viewPager.isUserInputEnabled = false
         val pageAdapter = PageAdapter(this, fragments)
@@ -59,7 +66,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(ActivityMainBinding::infl
                     if (!UserDataStore.getInstance().isLogin()) {
                         showToast("请先登录")
                     } else {
-                        ArticlesActivity.actionStart(context, "收藏的文章", -1)
+                        ArticlesActivity.actionStart(context, TYPE_COLLECTION, "收藏的文章", -1)
                     }
                 }
 

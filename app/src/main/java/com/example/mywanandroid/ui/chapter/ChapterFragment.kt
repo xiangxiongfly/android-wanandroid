@@ -7,6 +7,7 @@ import com.example.mywanandroid.common.utils.ToastUtils.showToast
 import com.example.mywanandroid.data.state.UiState
 import com.example.mywanandroid.databinding.FragmentChapterBinding
 import com.example.mywanandroid.ui.articles.ArticlesActivity
+import com.example.mywanandroid.ui.articles.ArticlesActivity.Companion.TYPE_ARTICLE
 
 
 class ChapterFragment : BaseFragment<FragmentChapterBinding>(FragmentChapterBinding::inflate) {
@@ -22,7 +23,7 @@ class ChapterFragment : BaseFragment<FragmentChapterBinding>(FragmentChapterBind
         adapter = ChapterAdapter().apply {
             setOnItemClickListener { _, _, i ->
                 val item = items[i]
-                ArticlesActivity.actionStart(context, item.name, item.id)
+                ArticlesActivity.actionStart(context, TYPE_ARTICLE, item.name, item.id)
             }
         }
         binding.rvChapter.adapter = adapter

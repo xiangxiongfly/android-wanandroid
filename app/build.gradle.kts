@@ -58,6 +58,9 @@ dependencies {
     implementation("androidx.datastore:datastore:1.0.0")
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
+    // MMKV
+    implementation(libs.mmkv)
+
     // Retrofit
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
@@ -67,8 +70,8 @@ dependencies {
     implementation(libs.gsonfactory)
 
     // Coil
-    implementation("io.coil-kt.coil3:coil:3.4.0")
-    implementation("io.coil-kt.coil3:coil-network-okhttp:3.4.0")
+    implementation(libs.coil)
+    implementation(libs.coil.network.okhttp)
 
     // 下拉刷新
     implementation("io.github.scwang90:refresh-layout-kernel:3.0.0-alpha")

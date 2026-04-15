@@ -39,6 +39,19 @@ class ArticleRepository(private val articleApi: ArticleApi = NetworkManager.crea
         }
     }.flowOn(Dispatchers.IO)
 
+    // 搜索文章
+    fun getQueryArticles(page: Int, k: String) = flow {
+        when (val result = handleRemote { articleApi.queryArticles(page, k) }) {
+            is RemoteResult.Success -> {
+                emit(Resource.Success(result.data))
+            }
+
+            is RemoteResult.Error -> {
+                emit(Resource.Error(result.errMsg, result.errCode))
+            }
+        }
+    }.flowOn(Dispatchers.IO)
+
     fun collectArticle(id: Int) = flow {
         if (UserDataStore.getInstance().isLogin()) {
             when (val result = handleRemote { articleApi.collectArticle(id) }) {

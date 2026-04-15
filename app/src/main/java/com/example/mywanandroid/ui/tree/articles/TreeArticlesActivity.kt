@@ -9,6 +9,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.mywanandroid.base.BaseActivity
 import com.example.mywanandroid.data.model.TreeChild
 import com.example.mywanandroid.databinding.ActivityTreeArticlesBinding
+import com.example.mywanandroid.ui.articles.ArticlesActivity.Companion.TYPE_ARTICLE
 import com.example.mywanandroid.ui.articles.ArticlesFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import com.hjq.bar.OnTitleBarListener
@@ -49,7 +50,7 @@ class TreeArticlesActivity : BaseActivity<ActivityTreeArticlesBinding>(ActivityT
         })
         for (child in children) {
             titles.add(child.name)
-            fragments.add(ArticlesFragment.newInstance(child.id))
+            fragments.add(ArticlesFragment.newInstance(TYPE_ARTICLE, child.id))
         }
         binding.viewPager.adapter = PageAdapter(this, fragments)
         TabLayoutMediator(

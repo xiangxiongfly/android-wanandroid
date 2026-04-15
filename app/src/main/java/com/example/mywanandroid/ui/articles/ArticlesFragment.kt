@@ -12,41 +12,58 @@ import com.example.mywanandroid.data.state.LOAD_TYPE_REFRESH
 import com.example.mywanandroid.data.state.ListUiState
 import com.example.mywanandroid.data.state.UiState
 import com.example.mywanandroid.databinding.FragmentArticlesBinding
+import com.example.mywanandroid.ui.articles.ArticlesActivity.Companion.TYPE_ARTICLE
+import com.example.mywanandroid.ui.articles.ArticlesActivity.Companion.TYPE_COLLECTION
+import com.example.mywanandroid.ui.articles.ArticlesActivity.Companion.TYPE_QUERY
 import com.example.mywanandroid.ui.home.ArticleAdapter
 import com.example.mywanandroid.ui.webview.WebViewActivity
 
 class ArticlesFragment : BaseFragment<FragmentArticlesBinding>(FragmentArticlesBinding::inflate) {
 
-    private val viewModel: ArticlesViewModel by viewModels { ArticlesViewModel.Factory(id) }
+    private val viewModel: ArticlesViewModel by viewModels { ArticlesViewModel.Factory(type) }
     private lateinit var adapter: ArticleAdapter
+    private var type = -1
     private var id = -1
+    private var keyword = ""
     private var collectPosition = -1
     private var uncollectPosition = -1
 
     companion object {
-        fun newInstance(id: Int) =
+        fun newInstance(type: Int, id: Int? = null, keyword: String? = null) =
             ArticlesFragment().apply {
                 arguments = Bundle().apply {
-                    putInt("id", id)
+                    putInt("type", type)
+                    if (id != null) {
+                        putInt("id", id)
+                    }
+                    if (keyword != null) {
+                        putString("keyword", keyword)
+                    }
                 }
             }
     }
 
     override fun initArguments(arguments: Bundle) {
         super.initArguments(arguments)
-        id = arguments.getInt("id", -1)
+        type = arguments.getInt("type", -1)
+        if (arguments.containsKey("id")) {
+            id = arguments.getInt("id", -1)
+        }
+        if (arguments.containsKey("keyword")) {
+            keyword = arguments.getString("keyword", "")
+        }
     }
 
     override fun initViews() {
         adapter = ArticleAdapter().apply {
-            setCollectType(id == -1)
+            setType(type)
             setOnItemClickListener { adapter, view, i ->
                 val item = items[i]
                 WebViewActivity.actionStart(context, item.title, item.link)
             }
             addOnItemChildClickListener(R.id.iv_collect, { adapter, view, position ->
                 val item = items[position]
-                if (id == -1) {
+                if (type == TYPE_COLLECTION) {
                     uncollectPosition = position
                     viewModel.uncollectArticleWithCollection(viewLifecycleOwner.lifecycleScope, item.id, item.originId)
                 } else {
@@ -66,6 +83,11 @@ class ArticlesFragment : BaseFragment<FragmentArticlesBinding>(FragmentArticlesB
     }
 
     override fun initData(savedInstanceState: Bundle?) {
+        if (type == TYPE_ARTICLE) {
+            viewModel.setId(id)
+        } else if (type == TYPE_QUERY) {
+            viewModel.setKeyword(keyword)
+        }
         viewModel.refreshArticles(viewLifecycleOwner.lifecycleScope)
         setupObserves()
     }

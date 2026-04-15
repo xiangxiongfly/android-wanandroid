@@ -10,15 +10,26 @@ import com.hjq.bar.OnTitleBarListener
 import com.hjq.bar.TitleBar
 
 class ArticlesActivity : BaseActivity<ActivityArticlesBinding>(ActivityArticlesBinding::inflate) {
+    private var type = -1
     private var title = ""
-    private var id = -1
+    private var id: Int? = null
+    private var keyword: String? = null
 
     companion object {
-        fun actionStart(context: Context, title: String, id: Int) {
+        const val TYPE_ARTICLE = 1
+        const val TYPE_COLLECTION = 2
+        const val TYPE_QUERY = 3
+        fun actionStart(context: Context, type: Int, title: String, id: Int? = null, keyword: String? = null) {
             context.startActivity(
                 Intent(context, ArticlesActivity::class.java).apply {
-                    putExtra("id", id)
+                    putExtra("type", type)
                     putExtra("title", title)
+                    if (id != null) {
+                        putExtra("id", id)
+                    }
+                    if (keyword != null) {
+                        putExtra("keyword", keyword)
+                    }
                 }
             )
         }
@@ -26,8 +37,14 @@ class ArticlesActivity : BaseActivity<ActivityArticlesBinding>(ActivityArticlesB
 
     override fun initExtras(intent: Intent) {
         super.initExtras(intent)
+        type = intent.getIntExtra("type", -1)
         title = intent.getStringExtra("title") ?: ""
-        id = intent.getIntExtra("id", -1)
+        if (intent.hasExtra("id")) {
+            id = intent.getIntExtra("id", -1)
+        }
+        if (intent.hasExtra("keyword")) {
+            keyword = intent.getStringExtra("keyword") ?: ""
+        }
     }
 
     override fun initViews() {
@@ -42,7 +59,7 @@ class ArticlesActivity : BaseActivity<ActivityArticlesBinding>(ActivityArticlesB
 
     override fun initData(savedInstanceState: Bundle?) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fragment_container, ArticlesFragment.newInstance(id))
+            .replace(R.id.fragment_container, ArticlesFragment.newInstance(type, id, keyword))
             .commit()
     }
 }

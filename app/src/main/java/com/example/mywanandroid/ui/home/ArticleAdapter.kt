@@ -8,12 +8,13 @@ import com.chad.library.adapter4.BaseQuickAdapter
 import com.chad.library.adapter4.viewholder.QuickViewHolder
 import com.example.mywanandroid.R
 import com.example.mywanandroid.data.model.Article
+import com.example.mywanandroid.ui.articles.ArticlesActivity.Companion.TYPE_COLLECTION
 
 class ArticleAdapter : BaseQuickAdapter<Article, QuickViewHolder>() {
-    private var collectType = false
+    private var type = -1
 
-    fun setCollectType(collectType: Boolean) {
-        this.collectType = collectType
+    fun setType(type: Int) {
+        this.type = type
     }
 
     override fun onCreateViewHolder(
@@ -44,7 +45,7 @@ class ArticleAdapter : BaseQuickAdapter<Article, QuickViewHolder>() {
                 if (TextUtils.isEmpty(it.author)) it.shareUser else it.author
             )
             holder.setText(R.id.tv_date, it.niceDate)
-            if (collectType) {
+            if (type == TYPE_COLLECTION) {
                 holder.setImageResource(R.id.iv_collect, R.drawable.ic_collected)
             } else {
                 holder.setImageResource(

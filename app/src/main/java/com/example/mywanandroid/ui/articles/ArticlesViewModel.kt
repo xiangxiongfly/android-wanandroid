@@ -11,11 +11,12 @@ import com.example.mywanandroid.data.state.LOAD_TYPE_REFRESH
 import com.example.mywanandroid.data.state.ListUiState
 import com.example.mywanandroid.data.state.Resource
 import com.example.mywanandroid.data.state.UiState
+import com.example.mywanandroid.ui.articles.ArticlesActivity.Companion.TYPE_COLLECTION
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class ArticlesViewModel(private val id: Int) : BaseViewModel() {
-    private val articleRepo by lazy { ArticleRepository() }
+class ArticlesViewModel(private val type: Int) : BaseViewModel() {
+    private val repo by lazy { ArticleRepository() }
     private val _state = MutableStateFlow<ListUiState<Article>>(ListUiState.Idle)
     val state = _state.asStateFlow()
     private val _collectState = MutableStateFlow<UiState<Any>>(UiState.Idle)
@@ -26,23 +27,33 @@ class ArticlesViewModel(private val id: Int) : BaseViewModel() {
     val uncollectWithCollectionState = _uncollectWithCollectionState.asStateFlow()
 
     private var page = FIRST_PAGE
+    private var id = -1
+    private var keyword = ""
 
     companion object {
         const val FIRST_PAGE = 0
     }
 
-    class Factory(private val id: Int) : ViewModelProvider.Factory {
+    class Factory(private val type: Int) : ViewModelProvider.Factory {
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            return ArticlesViewModel(id) as T
+            return ArticlesViewModel(type) as T
         }
+    }
+
+    fun setId(id: Int) {
+        this.id = id
+    }
+
+    fun setKeyword(keyword: String) {
+        this.keyword = keyword
     }
 
     fun refreshArticles(lifecycleScope: LifecycleCoroutineScope) {
         launchIO(lifecycleScope) {
             _state.value = ListUiState.Refreshing
             page = FIRST_PAGE
-            if (id == -1) {
-                articleRepo.getCollectArticles(page).collect {
+            if (type == TYPE_COLLECTION) {
+                repo.getCollectArticles(page).collect {
                     when (it) {
                         is Resource.Success -> {
                             _state.value = ListUiState.Success(LOAD_TYPE_REFRESH, it.data.datas)
@@ -55,7 +66,7 @@ class ArticlesViewModel(private val id: Int) : BaseViewModel() {
                     }
                 }
             } else {
-                articleRepo.getChapterArticles(id, page).collect {
+                repo.getChapterArticles(id, page).collect {
                     when (it) {
                         is Resource.Success -> {
                             _state.value = ListUiState.Success(LOAD_TYPE_REFRESH, it.data.datas)
@@ -74,8 +85,8 @@ class ArticlesViewModel(private val id: Int) : BaseViewModel() {
     fun loadMoreArticles(lifecycleScope: LifecycleCoroutineScope) {
         launchIO(lifecycleScope) {
             _state.value = ListUiState.LoadingMore
-            if (id == -1) {
-                articleRepo.getCollectArticles(page).collect {
+            if (type == TYPE_COLLECTION) {
+                repo.getCollectArticles(page).collect {
                     when (it) {
                         is Resource.Success -> {
                             _state.value = ListUiState.Success(LOAD_TYPE_LOAD_MORE, it.data.datas)
@@ -88,7 +99,7 @@ class ArticlesViewModel(private val id: Int) : BaseViewModel() {
                     }
                 }
             } else {
-                articleRepo.getChapterArticles(id, page).collect {
+                repo.getChapterArticles(id, page).collect {
                     when (it) {
                         is Resource.Success -> {
                             _state.value = ListUiState.Success(LOAD_TYPE_LOAD_MORE, it.data.datas)
@@ -107,7 +118,7 @@ class ArticlesViewModel(private val id: Int) : BaseViewModel() {
     fun collectArticle(lifecycleScope: LifecycleCoroutineScope, id: Int) {
         launchIO(lifecycleScope) {
             _collectState.value = UiState.Loading
-            articleRepo.collectArticle(id).collect {
+            repo.collectArticle(id).collect {
                 when (it) {
                     is Resource.Success -> {
                         _collectState.value = UiState.Empty
@@ -124,7 +135,7 @@ class ArticlesViewModel(private val id: Int) : BaseViewModel() {
     fun uncollectArticle(lifecycleScope: LifecycleCoroutineScope, id: Int) {
         launchIO(lifecycleScope) {
             _uncollectState.value = UiState.Loading
-            articleRepo.uncollectArticle(id).collect {
+            repo.uncollectArticle(id).collect {
                 when (it) {
                     is Resource.Success -> {
                         _uncollectState.value = UiState.Empty
@@ -141,7 +152,7 @@ class ArticlesViewModel(private val id: Int) : BaseViewModel() {
     fun uncollectArticleWithCollection(lifecycleScope: LifecycleCoroutineScope, id: Int, originId: Int) {
         launchIO(lifecycleScope) {
             _uncollectWithCollectionState.value = UiState.Loading
-            articleRepo.uncollectArticleWithCollection(id, originId).collect {
+            repo.uncollectArticleWithCollection(id, originId).collect {
                 when (it) {
                     is Resource.Success -> {
                         _uncollectWithCollectionState.value = UiState.Empty
