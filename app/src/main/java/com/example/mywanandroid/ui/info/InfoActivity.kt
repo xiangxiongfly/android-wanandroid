@@ -36,6 +36,8 @@ class InfoActivity : BaseActivity<ActivityInfoBinding>(ActivityInfoBinding::infl
         轮播图：BannerViewPager
         标题栏：TitleBar
         WebView：AgentWeb      
+        数据缓存：DataStore+MMKV
+        
 """.trimIndent()
     }
 
