@@ -12,6 +12,7 @@ import com.example.mywanandroid.data.state.ListUiState
 import com.example.mywanandroid.data.state.Resource
 import com.example.mywanandroid.data.state.UiState
 import com.example.mywanandroid.ui.articles.ArticlesActivity.Companion.TYPE_COLLECTION
+import com.example.mywanandroid.ui.articles.ArticlesActivity.Companion.TYPE_QUERY
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
@@ -52,30 +53,28 @@ class ArticlesViewModel(private val type: Int) : BaseViewModel() {
         launchIO(lifecycleScope) {
             _state.value = ListUiState.Refreshing
             page = FIRST_PAGE
-            if (type == TYPE_COLLECTION) {
-                repo.getCollectArticles(page).collect {
-                    when (it) {
-                        is Resource.Success -> {
-                            _state.value = ListUiState.Success(LOAD_TYPE_REFRESH, it.data.datas)
-                            page++
-                        }
 
-                        is Resource.Error -> {
-                            _state.value = ListUiState.Error(LOAD_TYPE_REFRESH, it.errMsg, it.errCode)
-                        }
-                    }
+            (when (type) {
+                TYPE_COLLECTION -> {
+                    repo.getCollectArticles(page)
                 }
-            } else {
-                repo.getChapterArticles(id, page).collect {
-                    when (it) {
-                        is Resource.Success -> {
-                            _state.value = ListUiState.Success(LOAD_TYPE_REFRESH, it.data.datas)
-                            page++
-                        }
 
-                        is Resource.Error -> {
-                            _state.value = ListUiState.Error(LOAD_TYPE_REFRESH, it.errMsg, it.errCode)
-                        }
+                TYPE_QUERY -> {
+                    repo.getQueryArticles(page, keyword)
+                }
+
+                else -> {
+                    repo.getChapterArticles(id, page)
+                }
+            }).collect {
+                when (it) {
+                    is Resource.Success -> {
+                        _state.value = ListUiState.Success(LOAD_TYPE_REFRESH, it.data.datas)
+                        page++
+                    }
+
+                    is Resource.Error -> {
+                        _state.value = ListUiState.Error(LOAD_TYPE_REFRESH, it.errMsg, it.errCode)
                     }
                 }
             }
@@ -85,30 +84,27 @@ class ArticlesViewModel(private val type: Int) : BaseViewModel() {
     fun loadMoreArticles(lifecycleScope: LifecycleCoroutineScope) {
         launchIO(lifecycleScope) {
             _state.value = ListUiState.LoadingMore
-            if (type == TYPE_COLLECTION) {
-                repo.getCollectArticles(page).collect {
-                    when (it) {
-                        is Resource.Success -> {
-                            _state.value = ListUiState.Success(LOAD_TYPE_LOAD_MORE, it.data.datas)
-                            page++
-                        }
-
-                        is Resource.Error -> {
-                            _state.value = ListUiState.Error(LOAD_TYPE_LOAD_MORE, it.errMsg, it.errCode)
-                        }
-                    }
+            (when (type) {
+                TYPE_COLLECTION -> {
+                    repo.getCollectArticles(page)
                 }
-            } else {
-                repo.getChapterArticles(id, page).collect {
-                    when (it) {
-                        is Resource.Success -> {
-                            _state.value = ListUiState.Success(LOAD_TYPE_LOAD_MORE, it.data.datas)
-                            page++
-                        }
 
-                        is Resource.Error -> {
-                            _state.value = ListUiState.Error(LOAD_TYPE_LOAD_MORE, it.errMsg, it.errCode)
-                        }
+                TYPE_QUERY -> {
+                    repo.getQueryArticles(page, keyword)
+                }
+
+                else -> {
+                    repo.getChapterArticles(id, page)
+                }
+            }).collect {
+                when (it) {
+                    is Resource.Success -> {
+                        _state.value = ListUiState.Success(LOAD_TYPE_LOAD_MORE, it.data.datas)
+                        page++
+                    }
+
+                    is Resource.Error -> {
+                        _state.value = ListUiState.Error(LOAD_TYPE_LOAD_MORE, it.errMsg, it.errCode)
                     }
                 }
             }

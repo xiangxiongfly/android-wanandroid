@@ -45,6 +45,10 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(ActivitySearchBinding
             }
             return@setOnEditorActionListener false
         }
+        binding.ivDelete.setOnClickListener {
+            MMKVUtils.remove(HOTKEYS)
+            binding.fblSearchHistory.removeAllViews()
+        }
     }
 
     private fun doSearch() {
@@ -53,7 +57,7 @@ class SearchActivity : BaseActivity<ActivitySearchBinding>(ActivitySearchBinding
             showToast("请输入关键字")
             return
         }
-
+        ArticlesActivity.actionStart(context, TYPE_QUERY, keywords, keyword = keywords)
         val hotkeySet = MMKVUtils.getStringSet(HOTKEYS)
         val set = hotkeySet.toHashSet()
         set.add(keywords)
