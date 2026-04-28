@@ -33,5 +33,11 @@ object NetworkManager {
             .build()
     }
 
-    fun <T> create(serviceClass: Class<T>, retrofit: Retrofit = defaultRetrofit): T = retrofit.create(serviceClass)
+    private val serviceCache = mutableMapOf<String, Any>()
+
+    fun <T> getService(serviceClass: Class<T>, retrofit: Retrofit = defaultRetrofit): T {
+        return serviceCache.getOrPut(serviceClass.name) {
+            retrofit.create(serviceClass) as Any
+        } as T
+    }
 }

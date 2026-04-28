@@ -4,15 +4,16 @@ import com.example.mywanandroid.base.BaseRepository
 import com.example.mywanandroid.data.respository.remote.api.TreeApi
 import com.example.mywanandroid.data.state.RemoteResult
 import com.example.mywanandroid.data.state.Resource
+import com.example.mywanandroid.domain.repository.TreeRepository
 import com.example.mywanandroid.networks.NetworkManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class TreeRepository(val treeApi: TreeApi = NetworkManager.create(TreeApi::class.java)) :
-    BaseRepository() {
+class TreeRepositoryImpl(val treeApi: TreeApi = NetworkManager.getService(TreeApi::class.java)) :
+    BaseRepository(), TreeRepository {
 
-    fun getTreeList() = flow {
+    override fun getTreeList() = flow {
         when (val result = handleRemote { treeApi.getTreeList() }) {
             is RemoteResult.Success -> {
                 emit(Resource.Success(result.data))
@@ -24,7 +25,7 @@ class TreeRepository(val treeApi: TreeApi = NetworkManager.create(TreeApi::class
         }
     }.flowOn(Dispatchers.IO)
 
-    fun getTreeArticleList(page: Int, cid: Int) = flow {
+    override fun getTreeArticleList(page: Int, cid: Int) = flow {
         when (val result = handleRemote { treeApi.getTreeArticleList(page, cid) }) {
             is RemoteResult.Success -> {
                 emit(Resource.Success(result.data))

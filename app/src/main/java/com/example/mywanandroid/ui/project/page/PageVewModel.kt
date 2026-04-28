@@ -3,7 +3,7 @@ package com.example.mywanandroid.ui.project.page
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.example.mywanandroid.base.BaseViewModel
 import com.example.mywanandroid.data.model.ProjectArticle
-import com.example.mywanandroid.data.respository.ProjectRepository
+import com.example.mywanandroid.data.respository.ProjectRepositoryImpl
 import com.example.mywanandroid.data.state.LOAD_TYPE_LOAD_MORE
 import com.example.mywanandroid.data.state.LOAD_TYPE_REFRESH
 import com.example.mywanandroid.data.state.ListUiState
@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class PageVewModel : BaseViewModel() {
-    private val repo by lazy { ProjectRepository() }
+    private val repo = ProjectRepositoryImpl()
     private val _articlesState =
         MutableStateFlow<ListUiState<ProjectArticle>>(ListUiState.Idle)
     val articlesState = _articlesState.asStateFlow()

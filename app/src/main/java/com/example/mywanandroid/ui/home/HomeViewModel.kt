@@ -4,8 +4,8 @@ import androidx.lifecycle.LifecycleCoroutineScope
 import com.example.mywanandroid.base.BaseViewModel
 import com.example.mywanandroid.data.model.Article
 import com.example.mywanandroid.data.model.Banner
-import com.example.mywanandroid.data.respository.ArticleRepository
-import com.example.mywanandroid.data.respository.HomeRepository
+import com.example.mywanandroid.data.respository.ArticleRepositoryImpl
+import com.example.mywanandroid.data.respository.HomeRepositoryImpl
 import com.example.mywanandroid.data.state.LOAD_TYPE_INITIAL
 import com.example.mywanandroid.data.state.LOAD_TYPE_LOAD_MORE
 import com.example.mywanandroid.data.state.LOAD_TYPE_REFRESH
@@ -21,8 +21,8 @@ class HomeViewModel : BaseViewModel() {
         const val FIRST_PAGE = 0
     }
 
-    private val repo by lazy { HomeRepository() }
-    private val articleRepo by lazy { ArticleRepository() }
+    private val repo = HomeRepositoryImpl()
+    private val articleRepo = ArticleRepositoryImpl()
 
     private val _bannerState = MutableStateFlow<UiState<List<Banner>>>(UiState.Idle)
     val bannerState = _bannerState.asStateFlow()

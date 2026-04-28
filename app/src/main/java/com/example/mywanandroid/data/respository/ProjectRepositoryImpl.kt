@@ -1,19 +1,20 @@
 package com.example.mywanandroid.data.respository
 
 import com.example.mywanandroid.base.BaseRepository
-import com.example.mywanandroid.data.respository.remote.api.HomeApi
+import com.example.mywanandroid.data.respository.remote.api.ProjectApi
 import com.example.mywanandroid.data.state.RemoteResult
 import com.example.mywanandroid.data.state.Resource
+import com.example.mywanandroid.domain.repository.ProjectRepository
 import com.example.mywanandroid.networks.NetworkManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class HomeRepository(private val homeApi: HomeApi = NetworkManager.create(HomeApi::class.java)) :
-    BaseRepository() {
+class ProjectRepositoryImpl(val projectApi: ProjectApi = NetworkManager.getService(ProjectApi::class.java)) :
+    BaseRepository(), ProjectRepository {
 
-    fun getBanner() = flow {
-        when (val result = handleRemote { homeApi.getBanner() }) {
+    override fun getProjectTree() = flow {
+        when (val result = handleRemote { projectApi.getProjectTree() }) {
             is RemoteResult.Success -> {
                 emit(Resource.Success(result.data))
             }
@@ -24,8 +25,8 @@ class HomeRepository(private val homeApi: HomeApi = NetworkManager.create(HomeAp
         }
     }.flowOn(Dispatchers.IO)
 
-    fun getArticleList(page: Int) = flow {
-        when (val result = handleRemote { homeApi.getArticleList(page) }) {
+    override fun getProjectArticleList(page: Int, cid: Int) = flow {
+        when (val result = handleRemote { projectApi.getProjectArticleList(page, cid) }) {
             is RemoteResult.Success -> {
                 emit(Resource.Success(result.data))
             }
@@ -35,5 +36,4 @@ class HomeRepository(private val homeApi: HomeApi = NetworkManager.create(HomeAp
             }
         }
     }.flowOn(Dispatchers.IO)
-
 }

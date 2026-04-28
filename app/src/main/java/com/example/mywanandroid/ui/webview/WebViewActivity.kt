@@ -61,7 +61,7 @@ class WebViewActivity : BaseActivity<ActivityWebViewBinding>(ActivityWebViewBind
     }
 
     override fun onDestroy() {
-        agentWeb?.webLifeCycle?.onDestroy()
+        agentWeb?.destroy()
         agentWeb = null
         super.onDestroy()
     }

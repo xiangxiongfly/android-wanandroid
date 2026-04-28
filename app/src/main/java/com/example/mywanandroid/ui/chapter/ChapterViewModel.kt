@@ -2,14 +2,14 @@ package com.example.mywanandroid.ui.chapter
 
 import com.example.mywanandroid.base.BaseViewModel
 import com.example.mywanandroid.data.model.Chapter
-import com.example.mywanandroid.data.respository.ChapterRepository
+import com.example.mywanandroid.data.respository.ChapterRepositoryImpl
 import com.example.mywanandroid.data.state.Resource
 import com.example.mywanandroid.data.state.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class ChapterViewModel : BaseViewModel() {
-    private val repo by lazy { ChapterRepository() }
+    private val repo = ChapterRepositoryImpl()
     private val _state = MutableStateFlow<UiState<List<Chapter>>>(UiState.Idle)
     val state = _state.asStateFlow()
 

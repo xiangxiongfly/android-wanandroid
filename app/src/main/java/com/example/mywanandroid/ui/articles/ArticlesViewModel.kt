@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.mywanandroid.base.BaseViewModel
 import com.example.mywanandroid.data.model.Article
-import com.example.mywanandroid.data.respository.ArticleRepository
+import com.example.mywanandroid.data.respository.ArticleRepositoryImpl
 import com.example.mywanandroid.data.state.LOAD_TYPE_LOAD_MORE
 import com.example.mywanandroid.data.state.LOAD_TYPE_REFRESH
 import com.example.mywanandroid.data.state.ListUiState
@@ -17,7 +17,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class ArticlesViewModel(private val type: Int) : BaseViewModel() {
-    private val repo by lazy { ArticleRepository() }
+    private val repo = ArticleRepositoryImpl()
     private val _state = MutableStateFlow<ListUiState<Article>>(ListUiState.Idle)
     val state = _state.asStateFlow()
     private val _collectState = MutableStateFlow<UiState<Any>>(UiState.Idle)

@@ -2,14 +2,14 @@ package com.example.mywanandroid.ui.search
 
 import com.example.mywanandroid.base.BaseViewModel
 import com.example.mywanandroid.data.model.Hotkey
-import com.example.mywanandroid.data.respository.SearchRepository
+import com.example.mywanandroid.data.respository.SearchRepositoryImpl
 import com.example.mywanandroid.data.state.Resource
 import com.example.mywanandroid.data.state.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class SearchViewModel : BaseViewModel() {
-    private val repo by lazy { SearchRepository() }
+    private val repo = SearchRepositoryImpl()
     private val _state = MutableStateFlow<UiState<List<Hotkey>>>(UiState.Idle)
     val state = _state.asStateFlow()
 

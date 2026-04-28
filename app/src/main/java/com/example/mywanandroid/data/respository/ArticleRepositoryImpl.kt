@@ -5,16 +5,16 @@ import com.example.mywanandroid.data.respository.local.UserDataStore
 import com.example.mywanandroid.data.respository.remote.api.ArticleApi
 import com.example.mywanandroid.data.state.RemoteResult
 import com.example.mywanandroid.data.state.Resource
+import com.example.mywanandroid.domain.repository.ArticleRepository
 import com.example.mywanandroid.networks.NetworkManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
-class ArticleRepository(private val articleApi: ArticleApi = NetworkManager.create(ArticleApi::class.java)) :
-    BaseRepository() {
+class ArticleRepositoryImpl(private val articleApi: ArticleApi = NetworkManager.getService(ArticleApi::class.java)) :
+    BaseRepository(), ArticleRepository {
 
-    // 公众号文章
-    fun getChapterArticles(id: Int, page: Int) = flow {
+    override fun getChapterArticles(id: Int, page: Int) = flow {
         when (val result = handleRemote { articleApi.getChapterArticles(id, page) }) {
             is RemoteResult.Success -> {
                 emit(Resource.Success(result.data))
@@ -26,8 +26,7 @@ class ArticleRepository(private val articleApi: ArticleApi = NetworkManager.crea
         }
     }.flowOn(Dispatchers.IO)
 
-    // 已收藏文章
-    fun getCollectArticles(page: Int) = flow {
+    override fun getCollectArticles(page: Int) = flow {
         when (val result = handleRemote { articleApi.getCollectArticles(page) }) {
             is RemoteResult.Success -> {
                 emit(Resource.Success(result.data))
@@ -39,8 +38,7 @@ class ArticleRepository(private val articleApi: ArticleApi = NetworkManager.crea
         }
     }.flowOn(Dispatchers.IO)
 
-    // 搜索文章
-    fun getQueryArticles(page: Int, k: String) = flow {
+    override fun getQueryArticles(page: Int, k: String) = flow {
         when (val result = handleRemote { articleApi.queryArticles(page, k) }) {
             is RemoteResult.Success -> {
                 emit(Resource.Success(result.data))
@@ -52,7 +50,7 @@ class ArticleRepository(private val articleApi: ArticleApi = NetworkManager.crea
         }
     }.flowOn(Dispatchers.IO)
 
-    fun collectArticle(id: Int) = flow {
+    override fun collectArticle(id: Int) = flow {
         if (UserDataStore.getInstance().isLogin()) {
             when (val result = handleRemote { articleApi.collectArticle(id) }) {
                 is RemoteResult.Success -> {
@@ -68,7 +66,7 @@ class ArticleRepository(private val articleApi: ArticleApi = NetworkManager.crea
         }
     }.flowOn(Dispatchers.IO)
 
-    fun uncollectArticle(id: Int) = flow {
+    override fun uncollectArticle(id: Int) = flow {
         when (val result = handleRemote { articleApi.uncollectArticle(id) }) {
             is RemoteResult.Success -> {
                 emit(Resource.Success(result.data))
@@ -80,7 +78,7 @@ class ArticleRepository(private val articleApi: ArticleApi = NetworkManager.crea
         }
     }.flowOn(Dispatchers.IO)
 
-    fun uncollectArticleWithCollection(id: Int, originId: Int) = flow {
+    override fun uncollectArticleWithCollection(id: Int, originId: Int) = flow {
         when (val result = handleRemote { articleApi.uncollectArticleWithCollection(id, originId) }) {
             is RemoteResult.Success -> {
                 emit(Resource.Success(result.data))
