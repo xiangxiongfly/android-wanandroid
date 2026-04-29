@@ -130,7 +130,6 @@ class HomeViewModel : BaseViewModel() {
         }
     }
 
-
     fun collectArticle(lifecycleScope: LifecycleCoroutineScope, id: Int) {
         launchIO(lifecycleScope) {
             _collectState.value = UiState.Loading
@@ -164,4 +163,5 @@ class HomeViewModel : BaseViewModel() {
             }
         }
     }
+
 }
